@@ -5,10 +5,15 @@ Hello {{$name}}
 
 
 hello --}}
-<h1>List of Tasks</h1>
+
+@extends('layouts.app')
 
 
-<div>
+
+@section('title', 'List of Tasks')
+
+@section('content')
+
     {{-- @if (count($tasks))
     @foreach ($tasks as $task)
      <div>{{$task->title}} </div>   
@@ -22,4 +27,4 @@ hello --}}
 @empty
    <div>hello</div> 
 @endforelse
-</div>
+@endsection
