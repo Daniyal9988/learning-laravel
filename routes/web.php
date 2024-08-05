@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -86,6 +87,10 @@ $tasks = [
 // });
 
 Route::get('/', function () use($tasks) {
+    return redirect()->route('tasks.index');
+});
+
+Route::get('/taks', function () use($tasks) {
     return view('index'
     ,
     [
@@ -95,6 +100,13 @@ Route::get('/', function () use($tasks) {
 })->name('tasks.index');
 
 
-Route::get('/{id}',function ($id){
-    return ('hello this is one task');
+Route::get('/taks/{id}',function ($id) use ($tasks){
+    $task = collect($tasks)->firstWhere('id',$id);
+
+    if(!$task)
+    {
+        return ('task not there');
+    }
+    return view('show', [ 'task' => $task]);
+
 })->name('tasks.show');
