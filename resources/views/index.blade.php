@@ -23,7 +23,7 @@ hello --}}
 
 @forelse ($tasks as $task)
 {{-- <div>{{$task->title}} </div> --}}
-<a href="{{ route ('tasks.show' , ['id' => $task->id])}}">{{$task->title}}</a></br>
+<a href="{{ route ('tasks.show' , ['task' => $task->id])}}">{{$task->title}}</a></br>
 @empty
    <div>hello</div> 
 @endforelse
