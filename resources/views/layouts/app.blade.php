@@ -2,6 +2,7 @@
 <head>
     <title>Laravell first app</title>
     @yield('styles')
+    
 </head>
 
 <body>

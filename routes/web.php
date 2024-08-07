@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use \App\Models\Task;
 use \App\Http\Requests\TaskRequest;
+use \App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -88,9 +89,13 @@ use \App\Http\Requests\TaskRequest;
 //     return 'you got somewhere my g';
 // });
 
-Route::get('/', function ()  {
-    return redirect()->route('tasks.index');
-});
+// Route::get('/', function ()  {
+//     return redirect()->route('tasks.index');
+// })->name('home');
+
+
+
+
 
 // Route::get('/taks', function () use($tasks) {
 //     return view('index'
@@ -114,58 +119,21 @@ Route::get('/', function ()  {
 // })->name('tasks.show');
 
 
-Route::get('/taks', function ()  {
-    return view('index'
-    ,
-    [
-        'tasks' => 
-        // \App\Models\Task::all()
-        // \App\Models\Task::latest()->where('completed' ,  true)->get()
-        Task::latest()->get()
-    ]
-);
-})->name('tasks.index');
+
+Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::get('/taks', [HomeController::class, 'showTasks'])->name('tasks.index');
+Route::get('/taks/{task}',[HomeController::class, 'TaskWithId'])->name('tasks.show');
+Route::get('/taks/{task}/edit',[HomeController::class, 'editTask'])->name('tasks.edit');
+Route::post('/tasks' ,[HomeController::class, 'createTask'])->name('tasks.store');
+Route::put('/tasks{task}' , [HomeController::class, 'updateTask'])->name('tasks.update');
+
+
+
 
 Route::view('/tasks/create' , 'create')
 ->name('tasks.create');
 
 
-Route::get('/taks/{task}',function (Task $task) {
-    
-    return view('show', 
-[ 'task' => $task]
-);
-})->name('tasks.show');
 
 
-Route::get('/taks/{task}/edit',function (Task $task) {
-    
-    return view('edit', 
-    [ 'task' => $task]
-);
-})->name('tasks.edit');
-
-
-Route::post('/tasks' , function(TaskRequest $request){
-    $task = Task::create($request->validated());
-
-
-    return redirect()->route('tasks.show' , ['task' => $task->id])
-    ->with('sucess' , 'Task craeted sucessfully ');
-})->name('tasks.store');
-
-
-
-Route::put('/tasks{task}' , function(Task $task, TaskRequest $request){
-    // $data = $request->validated();
-
-    // $task->title = $data['title'];
-    // $task->description = $data['description'];
-    // $task->long_description = $data['long_description'];
-    // $task->save();
-    $task->update($request->validated());
-
-    return redirect()->route('tasks.show' , ['id' => $task->id])
-    ->with('sucess' , 'Task Updated sucessfully ');
-})->name('tasks.update');
 
