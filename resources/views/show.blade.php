@@ -1,4 +1,9 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Dashboard') }}
+        </h2>
+    </x-slot>
 
 <style>
     body {
@@ -7,10 +12,10 @@
         color: #333;
         margin: 0;
         padding: 0;
-        background-image: url('https://coolbackgrounds.io/images/backgrounds/index/sea-edge-79ab30e2.png');
+        /* background-image: url('https://coolbackgrounds.io/images/backgrounds/index/sea-edge-79ab30e2.png');
     background-size: cover;
     background-repeat: no-repeat; 
-    background-position: center;
+    background-position: center; */
     }
 
     .main-container {
@@ -61,9 +66,9 @@
     }
 </style>
 
-{{-- @section('title', $task->title) --}}
 
-@section('content')
+
+
 <div class="main-container">
     <h3>Title</h3>
     <p>{{ $task->title }}</p>
@@ -87,4 +92,4 @@
         <a href="{{ route('tasks.index') }}">Back to Tasks</a>
     </div>
 </div>
-@endsection
+</x-app-layout>

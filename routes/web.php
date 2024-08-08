@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use \App\Models\Task;
 use \App\Http\Requests\TaskRequest;
-use \App\Http\Controllers\HomeController;
+use \App\Http\Controllers\TaskController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,123 +18,34 @@ use \App\Http\Controllers\HomeController;
 |
 */
 
-// class Task
-// {
-//     public function __construct(
-//         public int $id,
-//         public string $title,
-//         public string $description,
-//         public ?string $long_description,
-//         public bool $completed,
-//         public string $created_at,
-//         public string $updated_at
-//     ) {
-//     }
-// }
+Route::get('/', function () {
+    return view('welcome');
+});
 
-// $tasks = [
-//     new Task(
-//         1,
-//         'Buy groceries',
-//         'Task 1 description',
-//         'Task 1 long description',
-//         false,
-//         '2023-03-01 12:00:00',
-//         '2023-03-01 12:00:00'
-//     ),
-//     new Task(
-//         2,
-//         'Sell old stuff',
-//         'Task 2 description',
-//         null,
-//         false,
-//         '2023-03-02 12:00:00',
-//         '2023-03-02 12:00:00'
-//     ),
-//     new Task(
-//         3,
-//         'Learn programming',
-//         'Task 3 description',
-//         'Task 3 long description',
-//         true,
-//         '2023-03-03 12:00:00',
-//         '2023-03-03 12:00:00'
-//     ),
-//     new Task(
-//         4,
-//         'Take dogs for a walk',
-//         'Task 4 description',
-//         null,
-//         false,
-//         '2023-03-04 12:00:00',
-//         '2023-03-04 12:00:00'
-//     ),
-// ];
+Route::get('/dashboard', function () {
+    return redirect('/taks');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
 
 
-//named routes 
-// Route::get('/danyyy', function () {
-//     return 'hello hi hi ';
-// })->name('dany');
+// Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::get('/taks', [TaskController::class, 'showtaks'])->middleware('auth')->name('tasks.index');
+Route::get('/taks/{task}',[TaskController::class, 'taskwithid'])->middleware('auth')->name('tasks.show');
+Route::get('/taks/{task}/edit',[TaskController::class, 'edittask'])->middleware('auth')->name('tasks.edit');
+Route::post('/tasks' ,[TaskController::class, 'createtask'])->middleware('auth')->name('tasks.store');
+Route::put('/tasks{task}' , [TaskController::class, 'updatetask'])->middleware('auth')->name('tasks.update');
 
-// Route::get('/greet/{name}', function ($name) {
-//     return 'hello'.$name. '!';
-// });
-
-// //url redirecting
-// Route::get('/hello', function () {
-//     return redirect()->route('dany');
-// });
-// //if no route matches this route matches 
-// Route::fallback(function(){
-//     return 'you got somewhere my g';
-// });
-
-// Route::get('/', function ()  {
-//     return redirect()->route('tasks.index');
-// })->name('home');
+// Auth::routes();
 
 
 
 
-
-// Route::get('/taks', function () use($tasks) {
-//     return view('index'
-//     ,
-//     [
-//         'tasks' => $tasks
-//     ]
-// );
-// })->name('tasks.index');
-
-
-// Route::get('/taks/{id}',function ($id) use ($tasks){
-//     $task = collect($tasks)->firstWhere('id',$id);
-
-//     if(!$task)
-//     {
-//         return ('task not there');
-//     }
-//     return view('show', [ 'task' => $task]);
-
-// })->name('tasks.show');
-
-
-
-Route::get('/', [HomeController::class, 'home'])->name('home');
-Route::get('/taks', [HomeController::class, 'showTasks'])->name('tasks.index');
-Route::get('/taks/{task}',[HomeController::class, 'TaskWithId'])->name('tasks.show');
-Route::get('/taks/{task}/edit',[HomeController::class, 'editTask'])->name('tasks.edit');
-Route::post('/tasks' ,[HomeController::class, 'createTask'])->name('tasks.store');
-Route::put('/tasks{task}' , [HomeController::class, 'updateTask'])->name('tasks.update');
-
-
-
-
-Route::view('/tasks/create' , 'create')
+Route::view('/tasks/create' , 'create')->middleware('auth')
 ->name('tasks.create');
-
-
-
-
-

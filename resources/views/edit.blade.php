@@ -1,8 +1,9 @@
-@extends('layouts.app')
-
-
-
-@section('styles')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Dashboard') }}
+        </h2>
+    </x-slot>
 <style>
     body {
         font-family: 'Arial', sans-serif;
@@ -10,10 +11,10 @@
         color: #333;
         margin: 0;
         padding: 0;
-        background-image: url('https://coolbackgrounds.io/images/backgrounds/index/sea-edge-79ab30e2.png');
+        /* background-image: url('https://coolbackgrounds.io/images/backgrounds/index/sea-edge-79ab30e2.png');
     background-size: cover;
     background-repeat: no-repeat; 
-    background-position: center;
+    background-position: center; */
     }
 
     .container {
@@ -74,9 +75,9 @@
         margin-bottom: 1rem;
     }
 </style>
-@endsection
 
-@section('content')
+
+
 <div class="container">
     <h1>Edit Task</h1>
     <form method="POST" action="{{ route('tasks.update', ['task' => $task->id]) }}">
@@ -110,4 +111,4 @@
         <button type="submit">Edit Task</button>
     </form>
 </div>
-@endsection
+</x-app-layout>
